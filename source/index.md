@@ -6,11 +6,7 @@ language_tabs:
   - python
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
-
-includes:
-  - errors
 
 search: true
 ---
@@ -70,23 +66,12 @@ This endpoint retrieves all news article.
 
 `GET http://localhost:3000/api/demo/newsarticles`
 
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
 ## Create and store News Article
 
 ```javascript
 
 var data = {"title":"test title", "content":"test content"};
-$http.post('/api/demo/newsarticles', $scope.news).success(function(response) {
+$http.post('/api/demo/newsarticles', data).success(function(response) {
     console.log(response);
 });
 
@@ -191,17 +176,19 @@ enddate | The end date of the time range
 ## Get a Specific News Article
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+$http.get('http://localhost:3000/api/demo/newsarticles/55ff65f3e57ca43d87d69255').success(function (response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/newsarticles/55ff65f3e57ca43d87d69255')
+
 ```
 
 > The above command returns JSON structured like this:
@@ -234,17 +221,21 @@ newsarticleId | The ID of the news article to retrieve
 ## Update a Specific News Article
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+var data = {"title":"test title", "content":"test content"};
+$http.put('/api/demo/newsarticles/55ff65f3e57ca43d87d69255', data).success(function(response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+import requests
+
+data = {"title":"test title", "content":"test content"}
+r = requests.put('http://localhost:3000/api/demo/newsarticles/55ff65f3e57ca43d87d69255', data)
+
 ```
 
 > The above command requires to attach JSON structured in the request body:
@@ -287,17 +278,19 @@ words_capture | The key words that was capture for this article
 ## Delete a News Article
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+$http.delete('http://localhost:3000/api/demo/newsarticles/55ff65f3e57ca43d87d69255').success(function (response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+import requests
+
+r = requests.delete('http://localhost:3000/api/demo/newsarticles/55ff65f3e57ca43d87d69255')
+
 ```
 
 This endpoint delete a specific news article record.
@@ -319,17 +312,19 @@ newsarticleId | The ID of the news article to delete
 ## Get All quotes
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
+$http.get('http://localhost:3000/api/demo/quotes').success(function (response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/quotes')
+
 ```
 
 > The above command returns JSON structured like this:
@@ -372,17 +367,39 @@ This endpoint retrieves all recorded quotes data.
 ## Create and store Quote
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+var data = {
+             "high": 90.389999,
+             "volume": 0,
+             "low": 88.43,
+             "qdate": "2015-10-06T00:00:00.000Z",
+             "close": 90.269997,
+             "symbol": "^DJC",
+             "open": 88.75,
+             "adj_close": 90.269997
+           };
+$http.post('/api/demo/quotes', data).success(function(response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+import requests
+
+data = {
+         "high": 90.389999,
+         "volume": 0,
+         "low": 88.43,
+         "qdate": "2015-10-06T00:00:00.000Z",
+         "close": 90.269997,
+         "symbol": "^DJC",
+         "open": 88.75,
+         "adj_close": 90.269997
+       }
+r = requests.post('http://localhost:3000/api/demo/quotes', data)
+
 ```
 
 > The above command requires to attach JSON structured in the request body:
@@ -400,7 +417,7 @@ api.kittens.get(2)
 }
 ```
 
-This endpoint will create and store news article record to server's database.
+This endpoint will create and store quote record to server's database.
 
 ### HTTP Request
 
@@ -426,17 +443,19 @@ qdate | The date of the quote
 ## Get a Specific Quote
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+$http.get('http://localhost:3000/api/demo/quotes/561596c64b91f43f49260bac').success(function (response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/quotes/561596c64b91f43f49260bac')
+
 ```
 
 > The above command returns JSON structured like this:
@@ -473,17 +492,19 @@ quoteId | The ID of the quote to retrieve
 ## Get quotes with time range
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+$http.get('http://localhost:3000/api/demo/quotes_by_date_range?startdate=2015-09-10&enddate=2015-09-15&indexsymbol=^DJC').success(function (response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/quotes_by_date_range?startdate=2015-09-10&enddate=2015-09-15&indexsymbol=^DJC')
+
 ```
 
 > The above command returns JSON structured like this:
@@ -491,27 +512,51 @@ api.kittens.get(2)
 ```json
 [
   {
-    "_id": "561596c64b91f43f49260ba7",
-    "high": 16865.089844,
-    "volume": 120010000,
-    "low": 16746.029297,
-    "qdate": "2015-10-06T00:00:00.000Z",
-    "close": 16790.189453,
-    "symbol": "^DJI",
-    "open": 16774.019531,
-    "adj_close": 16790.189453,
+    "_id": "56140b96704afaca3a822c88",
+    "high": 88.889999,
+    "volume": 0,
+    "low": 88.400002,
+    "qdate": "2015-09-15T00:00:00.000Z",
+    "close": 88.57,
+    "symbol": "^DJC",
+    "open": 88.839996,
+    "adj_close": 88.57,
     "__v": 0
   },
   {
-    "_id": "561596c64b91f43f49260bac",
-    "high": 90.389999,
+    "_id": "56140b96704afaca3a822c89",
+    "high": 89.32,
     "volume": 0,
-    "low": 88.43,
-    "qdate": "2015-10-06T00:00:00.000Z",
-    "close": 90.269997,
+    "low": 88.349998,
+    "qdate": "2015-09-14T00:00:00.000Z",
+    "close": 88.57,
     "symbol": "^DJC",
-    "open": 88.75,
-    "adj_close": 90.269997,
+    "open": 89.309998,
+    "adj_close": 88.57,
+    "__v": 0
+  },
+  {
+    "_id": "56140b96704afaca3a822c8a",
+    "high": 89.199997,
+    "volume": 0,
+    "low": 87.879997,
+    "qdate": "2015-09-11T00:00:00.000Z",
+    "close": 88.93,
+    "symbol": "^DJC",
+    "open": 89.120003,
+    "adj_close": 88.93,
+    "__v": 0
+  },
+  {
+    "_id": "56140b96704afaca3a822c8b",
+    "high": 89.269997,
+    "volume": 0,
+    "low": 87.949997,
+    "qdate": "2015-09-10T00:00:00.000Z",
+    "close": 89.150002,
+    "symbol": "^DJC",
+    "open": 88.279999,
+    "adj_close": 89.150002,
     "__v": 0
   }
 ]
@@ -538,17 +583,39 @@ indexsymbol | Optional parameter which allows returned data to be filtered with 
 ## Update a Specific Quote
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+var data = {
+             "high": 90.389999,
+             "volume": 0,
+             "low": 88.43,
+             "qdate": "2015-10-06T00:00:00.000Z",
+             "close": 90.269997,
+             "symbol": "^DJC",
+             "open": 88.75,
+             "adj_close": 90.269997
+           };
+$http.put('/api/demo/quotes/56140b96704afaca3a822c8b', data).success(function(response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+import requests
+
+data = {
+         "high": 90.389999,
+         "volume": 0,
+         "low": 88.43,
+         "qdate": "2015-10-06T00:00:00.000Z",
+         "close": 90.269997,
+         "symbol": "^DJC",
+         "open": 88.75,
+         "adj_close": 90.269997
+       }
+r = requests.put('http://localhost:3000/api/demo/quotes/56140b96704afaca3a822c8b', data)
+
 ```
 
 > The above command requires to attach JSON structured in the request body:
@@ -597,17 +664,19 @@ qdate | The date of the quote
 ## Delete a Quote
 
 ```javascript
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+$http.delete('http://localhost:3000/api/demo/quotes/56140b96704afaca3a822c8b').success(function (response) {
+    console.log(response);
+});
+
 ```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+import requests
+
+r = requests.delete('http://localhost:3000/api/demo/quotes/56140b96704afaca3a822c8b')
+
 ```
 
 This endpoint delete a specific quote.
