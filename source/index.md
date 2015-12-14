@@ -19,6 +19,19 @@ Rest API is cross platform, which you can use it as long as being able to send R
 
 # News Articles
 
+News Article is the data that stores information about the news article that is crawled from the internet.
+
+### Data attributes
+
+Attribute | Description
+--------- | -----------
+newsDate | The date of the news article (default is the date when the news is inserted in to the database)
+title | The title of the news article
+content | The body content of the article
+url | The url of the news article
+sentiment | The sentiment of the news article
+keywords | The list of the captured key words
+
 ## Get All news articles
 
 ```javascript
@@ -92,7 +105,8 @@ r = requests.post('http://localhost:3000/api/demo/newsarticles', data)
 {
   "title": "Sample title 1",
   "content": "This is sample content 1",
-  "words_capture": ["sample","content"],
+  "keywords": ["sample","content"],
+  "sentiment": "0.5",
   "newsDate": "2015-09-21T02:05:39.253Z"
 }
 ```
@@ -113,7 +127,8 @@ newsDate | The date of the news article (default is the date when the news is in
 *title | The title of the news article
 *content | The body content of the article
 url | The url of the news article
-words_capture | The key words that was capture for this article
+sentiment | The sentiment of the news article
+keywords | The list of the captured key words
 
 <aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
 
@@ -144,14 +159,16 @@ r = requests.get('http://localhost:3000/api/demo/newsarticles?startdate=2015-09-
     "title": "Sample title 1",
     "content": "This is sample content 1",
     "__v": 0,
-    "words_capture": ["sample","content"],
+    "keywords": ["sample","content"],
+    "sentiment": "0.5",
     "newsDate": "2015-09-21T02:05:39.253Z"
   },
   {
     "_id": "55ff963e1e03272096adaa42",
     "title": "Sample title 2",
     "content": "Sample content 2",
-    "words_capture": ["Sample","content","2"],
+    "keywords": ["Sample","content","2"],
+    "sentiment": "0.5",
     "__v": 0,
     "newsDate": "2015-09-23T05:31:42.546Z"
   }
@@ -199,7 +216,8 @@ r = requests.get('http://localhost:3000/api/demo/newsarticles/55ff65f3e57ca43d87
   "title": "Sample title 1",
   "content": "This is sample content 1",
   "__v": 0,
-  "words_capture": ["sample","content"],
+  "keywords": ["sample","content"],
+  "sentiment" : "0.5",
   "newsDate": "2015-09-21T02:05:39.253Z"
 }
 ```
@@ -244,7 +262,8 @@ r = requests.put('http://localhost:3000/api/demo/newsarticles/55ff65f3e57ca43d87
 {
   "title": "Sample title 1",
   "content": "This is sample content 1",
-  "words_capture": ["sample","content"],
+  "keywords": ["sample","content"],
+  "sentiment": "0.5",
   "newsDate": "2015-09-21T02:05:39.253Z"
 }
 ```
@@ -271,7 +290,8 @@ newsDate | The date of the news article (default is the date when the news is in
 *title | The title of the news article
 *content | The body content of the article
 url | The url of the news article
-words_capture | The key words that was capture for this article
+keywords | The key words that was capture for this article
+sentiment | The sentiment of the news article
 
 <aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
 
@@ -308,6 +328,20 @@ newsarticleId | The ID of the news article to delete
 <aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
 
 #Commodity Quotes
+
+Commodity Quotes is the data that stores the information about commodity index quote data for each day.
+
+### Data attributes
+
+Attribute | Description
+--------- | -----------
+high | The high index recorded for that quote on that date
+low | The low index recorded for the quote on that date
+close | The index of the quote when it is closed for the day
+adj_close | The adjusted close index of the quote for the day
+open | The index of the quote when it is opened for the day
+symbol | The symbol/abbreviation of the quote's name on Yahoo! Finance Server
+qdate | The date of the quote
 
 ## Get All quotes
 
@@ -788,6 +822,18 @@ indexsymbol | A market ticker symbol
 
 # Entities
 
+Entities is the data that stores the information about captured entities for each day.
+
+### Data attributes
+
+Attribute | Description
+--------- | -----------
+entityDate | The date of the entity (default is the date when the entity is inserted in to the database)
+text | The entity's name
+count | The number of times the entity appears in a week's news
+sentiment | A value which indicates to what extent an entity was mentioned in a positive or negative tone in the news. Values range from -1 (very negative) to +1 (very positive)
+
+
 ## Get All Entities
 
 ```javascript
@@ -1079,6 +1125,24 @@ entityId | The ID of the entity to delete
 
 
 # Week Summary
+
+Week Summary is the data that stores the summarized data for each week, such as week momentum and week index quote RSI indicator.
+
+### Data Attributes
+
+Attribute | Description
+--------- | -----------
+week_start_date | The starting date of a week
+week_end_date | The ending date of a week
+week_index | A market ticker symbol(default is "^DJC")
+bcom_indices | An array of IDs for market quote records
+bcom_max | The market index's highest value within a week
+bcom_min | The market index's lowest value within a week
+bcom_avg_slope | The market index's slope value for the week
+bcom_week_momentum | The market index's momentum indicator value for the week
+bcom_rsi | The market index's Relative Strength Indicator value for the week
+articles | An array of IDs for news article records
+avg_article_sentiment | The average of all the sentiment field values in the array of articles
 
 ## Get All Week Summaries
 
@@ -1489,7 +1553,7 @@ This endpoint runs the ArticleCrawler.py and ArticleDatabaseClean.py Python scri
 
 
 
-# Crawl and Generate Week Summary
+# Get Week Summary
 
 ## Crawl and Generate Week Summary
 
@@ -1510,7 +1574,7 @@ r = requests.get('http://localhost:3000/api/demo/crawl_and_generate_week_summary
 ```
 
 
-This endpoint runs the IndexCrawler.py Python script to obtain market quotes from Yahoo Finance. After the market quotes have been retrieved, a week summary is generated and stored in the database.
+This endpoint runs the IndexCrawler.py Python script to obtain market quotes from Yahoo Finance Server. After the market quotes have been retrieved, a week summary is generated and stored in the database.
 
 ### HTTP Request
 
