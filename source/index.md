@@ -475,7 +475,7 @@ r = requests.get('http://localhost:3000/api/demo/quotes/561596c64b91f43f49260bac
 }
 ```
 
-This endpoint retrieves a specific news article record.
+This endpoint retrieves a specific quote record.
 
 ### HTTP Request
 
@@ -487,7 +487,7 @@ Parameter | Description
 --------- | -----------
 quoteId | The ID of the quote to retrieve
 
-<aside class="notice">The quoteId of the quote is the primary key that the record is stored in the databse.</aside>
+<aside class="notice">The quoteId of the quote is the primary key that the record is stored in the database.</aside>
 
 ## Get quotes with time range
 
@@ -679,7 +679,7 @@ r = requests.delete('http://localhost:3000/api/demo/quotes/56140b96704afaca3a822
 
 ```
 
-This endpoint delete a specific quote.
+This endpoint deletes a specific quote.
 
 ### HTTP Request
 
@@ -692,4 +692,827 @@ Parameter | Description
 quoteId | The ID of the quote to delete
 
 <aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
+
+
+
+## Get Quotes with Symbol
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/quotes_by_symbol?indexsymbol=^DJC').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/quotes_by_symbol?indexsymbol=^DJC')
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "_id": "56140b96704afaca3a822c88",
+    "high": 88.889999,
+    "volume": 0,
+    "low": 88.400002,
+    "qdate": "2015-09-15T00:00:00.000Z",
+    "close": 88.57,
+    "symbol": "^DJC",
+    "open": 88.839996,
+    "adj_close": 88.57,
+    "__v": 0
+  },
+  {
+    "_id": "56140b96704afaca3a822c89",
+    "high": 89.32,
+    "volume": 0,
+    "low": 88.349998,
+    "qdate": "2015-09-14T00:00:00.000Z",
+    "close": 88.57,
+    "symbol": "^DJC",
+    "open": 89.309998,
+    "adj_close": 88.57,
+    "__v": 0
+  },
+  {
+    "_id": "56140b96704afaca3a822c8a",
+    "high": 89.199997,
+    "volume": 0,
+    "low": 87.879997,
+    "qdate": "2015-09-11T00:00:00.000Z",
+    "close": 88.93,
+    "symbol": "^DJC",
+    "open": 89.120003,
+    "adj_close": 88.93,
+    "__v": 0
+  },
+  {
+    "_id": "56140b96704afaca3a822c8b",
+    "high": 89.269997,
+    "volume": 0,
+    "low": 87.949997,
+    "qdate": "2015-09-10T00:00:00.000Z",
+    "close": 89.150002,
+    "symbol": "^DJC",
+    "open": 88.279999,
+    "adj_close": 89.150002,
+    "__v": 0
+  }
+]
+```
+
+This endpoint retrieves a list of quotes that have a given market ticker symbol (ex. ^DJC).
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/quotes_by_symbol?indexsymbol=XX`
+
+### URL Parameters
+
+
+
+Parameter | Description
+--------- | -----------
+indexsymbol | A market ticker symbol
+
+
+
+
+
+# Entities
+
+## Get All Entities
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/entity').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/entity')
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "_id": "55ff65f3e57ca43d87d69255",
+    "entityDate": "2015-12-12T00:00:00.000Z",
+    "text": "Federal Reserve",
+    "count": 10,
+    "sentiment": 0.5
+
+  },
+  {
+    "_id": "55ff65f3e57ca43d87d69259",
+    "entityDate": "2015-12-12T00:00:00.000Z",
+    "text": "Inflation",
+    "count": 7,
+    "sentiment": -0.25
+  }
+]
+```
+
+This endpoint retrieves all entities.
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/entity`
+
+## Create and Store Entities
+
+```javascript
+
+var data = {"entityDate":"2015-12-12", "text":"Federal Reserve", "count":10, "sentiment":0.5};
+$http.post('/api/demo/entity', data).success(function(response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+data = {"entityDate":"2015-12-12T00:00:00.000Z", "text":"Federal Reserve", "count":10, "sentiment":0.5}
+r = requests.post('http://localhost:3000/api/demo/entity', data)
+
+```
+
+> The above command requires to attach JSON structured in the request body:
+
+```json
+{
+  "_id": "55ff65f3e57ca43d87d69255",
+  "entityDate": "2015-12-12T00:00:00.000Z",
+  "text": "Federal Reserve",
+  "count": 10,
+  "sentiment": 0.5
+}
+```
+
+This endpoint will create and store entity records to the server's database.
+
+### HTTP Request
+
+`POST http://localhost:3000/api/demo/entity/`
+
+### JSON data format
+
+\* - required field
+
+Field | Description
+--------- | -----------
+entityDate | The date of the entity (default is the date when the entity is inserted in to the database)
+*text | The entity's name
+*count | The number of times the entity appears in a week's news
+sentiment | A value which indicates to what extent an entity was mentioned in a positive or negative tone in the news. Values range from -1 (very negative) to +1 (very positive)
+
+
+<aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
+
+## Get an Entity within Time Range
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/entitiesbydaterange?startdate=2015-11-16&enddate=2015-11-17').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/entitiesbydaterange?startdate=2015-11-16&enddate=2015-11-17')
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+      "_id": "55ff65f3e57ca43d87d69255",
+      "entityDate": "2015-11-16T00:00:00.000Z",
+      "text": "Federal Reserve",
+      "count": 10,
+      "sentiment": 0.5
+
+    },
+    {
+      "_id": "55ff65f3e57ca43d87d69259",
+      "entityDate": "2015-11-17T00:00:00.000Z",
+      "text": "Inflation",
+      "count": 7,
+      "sentiment": -0.25
+    }
+]
+```
+
+This endpoint retrieves a list of entities that are in the given time range.
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/entitiesbydaterange?startdate=YYYY-MM-DD&enddate=YYYY-MM-DD`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+startdate | The start date of the time range
+enddate | The end date of the time range
+
+<aside class="notice">The time range of startdate and enddate will be inclusive</aside>
+
+## Get a Specific Entity
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/entity/55ff65f3e57ca43d87d69255').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/entity/55ff65f3e57ca43d87d69255')
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+  {
+      "_id": "55ff65f3e57ca43d87d69255",
+      "entityDate": "2015-11-16T00:00:00.000Z",
+      "text": "Federal Reserve",
+      "count": 10,
+      "sentiment": 0.5
+
+  }
+```
+
+This endpoint retrieves a specific entity record.
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/entity/:entityId`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+entityId | The ID of the entity to retrieve
+
+<aside class="notice">The entityId is the primary key of the record stored in the database.</aside>
+
+## Update a Specific Entity
+
+```javascript
+
+var data = {"entityDate":"2015-12-12", "text":"Federal Reserve", "count":10, "sentiment":0.5};
+$http.put('/api/demo/entity/55ff65f3e57ca43d87d69255', data).success(function(response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+data = {"entityDate":"2015-12-12", "text":"Federal Reserve", "count":10, "sentiment":0.5}
+r = requests.put('http://localhost:3000/api/demo/entity/55ff65f3e57ca43d87d69255', data)
+
+```
+
+> The above command requires to attach JSON structured in the request body:
+
+```json
+    {
+      "_id": "55ff65f3e57ca43d87d69255",
+      "entityDate": "2015-11-16T00:00:00.000Z",
+      "text": "Federal Reserve",
+      "count": 10,
+      "sentiment": 0.5
+
+    }
+```
+
+This endpoint update a specific entity record.
+
+### HTTP Request
+
+`PUT http://localhost:3000/api/demo/entity/:entityId`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+entityId | The ID of the entity to retrieve
+
+### JSON data format
+
+\* - required field
+
+Field | Description
+--------- | -----------
+entityDate | The date of the entity (default is the date when the entity is inserted in to the database)
+*text | The entity's name
+*count | The number of times the entity appears in a week's news
+sentiment | A value which indicates to what extent an entity was mentioned in a positive or negative tone in the news. Values range from -1 (very negative) to +1 (very positive)
+
+<aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
+
+## Delete an Entity
+
+```javascript
+
+$http.delete('http://localhost:3000/api/demo/entity/55ff65f3e57ca43d87d69255').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.delete('http://localhost:3000/api/demo/entity/55ff65f3e57ca43d87d69255')
+
+```
+
+This endpoint deletes a specific entity record.
+
+### HTTP Request
+
+`DELETE http://localhost:3000/api/demo/entity/:entityId`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+entityId | The ID of the entity to delete
+
+<aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
+
+
+
+# Week Summary
+
+## Get All Week Summaries
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/weeksum').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/weeksum')
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {
+    "_id": "55ff65f3e57ca43d87d69259",
+    "week_start_date":"2015-11-16:T00:00:00.000Z",
+    "week_end_date":"2015-11-20:T00:00:00.000Z",
+    "week_index":"^DJC",
+    "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+    "bcom_max":81.75,
+    "bcom_min":80.37,
+    "bcom_avg_slope":-0.15,
+    "bcom_week_momentum":0.62,
+    "bcom_rsi":40.8,
+    "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+    "avg_article_sentiment":0.25
+  },
+  {
+     "_id": "55ff65f3e57ca43d87d69260",
+     "week_start_date":"2015-11-09:T00:00:00.000Z",
+     "week_end_date":"2015-11-13:T00:00:00.000Z",
+     "week_index":"^DJC",
+     "bcom_indices":["55ff65f3e50","55ff65f3e51","55ff65f3e52","55ff65f3e53","55ff65f3e54"],
+     "bcom_max":82.46,
+     "bcom_min":81.42,
+     "bcom_avg_slope":0.26,
+     "bcom_week_momentum":-1.04,
+     "bcom_rsi":87.68,
+     "articles":["55ff65f3e40","55ff65f3e41","55ff65f3e42","55ff65f3e43","55ff65f3e44"],
+     "avg_article_sentiment":0.30
+  }
+]
+```
+
+This endpoint retrieves all week summaries.
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/weeksum`
+
+## Create and Store Week Summaries
+
+```javascript
+
+var data = {"week_start_date":"2015-11-16:T00:00:00.000Z",
+            "week_end_date":"2015-11-20:T00:00:00.000Z",
+            "week_index":"^DJC",
+            "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+            "bcom_max":81.75,
+            "bcom_min":80.37,
+            "bcom_avg_slope":-0.15,
+            "bcom_week_momentum":0.62,
+            "bcom_rsi":40.8,
+            "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+            "avg_article_sentiment":0.25};
+$http.post('/api/demo/weeksum', data).success(function(response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+data = {
+            "week_start_date":"2015-11-16:T00:00:00.000Z",
+            "week_end_date":"2015-11-20:T00:00:00.000Z",
+            "week_index":"^DJC",
+            "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+            "bcom_max":81.75,
+            "bcom_min":80.37,
+            "bcom_avg_slope":-0.15,
+            "bcom_week_momentum":0.62,
+            "bcom_rsi":40.8,
+            "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+            "avg_article_sentiment":0.25}
+r = requests.post('http://localhost:3000/api/demo/weeksum', data)
+
+```
+
+> The above command requires to attach JSON structured in the request body:
+
+```json
+{             "_id": "55ff65f3e58",
+              "week_start_date":"2015-11-16:T00:00:00.000Z",
+              "week_end_date":"2015-11-20:T00:00:00.000Z",
+              "week_index":"^DJC",
+              "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+              "bcom_max":81.75,
+              "bcom_min":80.37,
+              "bcom_avg_slope":-0.15,
+              "bcom_week_momentum":0.62,
+              "bcom_rsi":40.8,
+              "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+              "avg_article_sentiment":0.25
+}
+```
+
+This endpoint will create and store week summary records to the server's database.
+
+### HTTP Request
+
+`POST http://localhost:3000/api/demo/weeksum/`
+
+### JSON data format
+
+\* - required field
+
+Field | Description
+--------- | -----------
+*week_start_date | The starting date of a week
+*week_end_date | The ending date of a week
+week_index | A market ticker symbol(default is "^DJC")
+bcom_indices | An array of IDs for market quote records
+*bcom_max | The market index's highest value within a week
+*bcom_min | The market index's lowest value within a week
+*bcom_avg_slope | The market index's slope value for the week
+bcom_week_momentum | The market index's momentum indicator value for the week
+bcom_rsi | The market index's Relative Strength Indicator value for the week
+articles | An array of IDs for news article records
+avg_article_sentiment | The average of all the sentiment field values in the array of articles
+
+<aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
+
+
+
+## Get Week Summary with Date
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/weeksum_by_date_index?date=2015-11-16&indexsymbol=^DJC').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/weeksum_by_date_index?date=2015-11-16&indexsymbol=^DJC')
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+[
+  {             "_id": "55ff65f3e58",
+                "week_start_date":"2015-11-16:T00:00:00.000Z",
+                "week_end_date":"2015-11-20:T00:00:00.000Z",
+                "week_index":"^DJC",
+                "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+                "bcom_max":81.75,
+                "bcom_min":80.37,
+                "bcom_avg_slope":-0.15,
+                "bcom_week_momentum":0.62,
+                "bcom_rsi":40.8,
+                "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+                "avg_article_sentiment":0.25
+  }
+]
+```
+
+This endpoint retrieves a week summary for a week that includes the date specified by a URL parameter.
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/weeksum_by_date_index?startdate=YYYY-MM-DD&enddate=YYYY-MM-DD`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+*date | The date which the returned week summary should include. Entering a Saturday date will return a week summary for the preceding Monday-Friday period. Entering a Sunday date will return a week summary for the upcoming Monday-Friday period.
+indexsymbol | A market ticker symbol (ex. "^DJC")
+
+
+## Get a Specific Week Summary
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/weeksum/55ff65f3e58').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/weeksum/55ff65f3e58')
+
+```
+
+> The above command returns JSON structured like this:
+
+```json
+  {
+    "_id": "55ff65f3e58",
+    "week_start_date":"2015-11-16:T00:00:00.000Z",
+    "week_end_date":"2015-11-20:T00:00:00.000Z",
+    "week_index":"^DJC",
+    "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+    "bcom_max":81.75,
+    "bcom_min":80.37,
+    "bcom_avg_slope":-0.15,
+    "bcom_week_momentum":0.62,
+    "bcom_rsi":40.8,
+    "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+    "avg_article_sentiment":0.25
+
+  }
+```
+
+This endpoint retrieves a specific week summary record.
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/weeksum:weeksumId`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+weeksumId | The ID of the week summary to retrieve
+
+<aside class="notice">weeksumID is the primary key of the record stored in the database.</aside>
+
+## Update a Specific Week Summary
+
+```javascript
+
+var data = {
+            "week_start_date":"2015-11-16:T00:00:00.000Z",
+            "week_end_date":"2015-11-20:T00:00:00.000Z",
+            "week_index":"^DJC",
+            "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+            "bcom_max":81.75,
+            "bcom_min":80.37,
+            "bcom_avg_slope":-0.15,
+            "bcom_week_momentum":0.62,
+            "bcom_rsi":40.8,
+            "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+            "avg_article_sentiment":0.25};
+$http.put('/api/demo/weeksum/55ff65f3e58', data).success(function(response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+data = {
+        "week_start_date":"2015-11-16:T00:00:00.000Z",
+        "week_end_date":"2015-11-20:T00:00:00.000Z",
+        "week_index":"^DJC",
+        "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+        "bcom_max":81.75,
+        "bcom_min":80.37,
+        "bcom_avg_slope":-0.15,
+        "bcom_week_momentum":0.62,
+        "bcom_rsi":40.8,
+        "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+        "avg_article_sentiment":0.25}
+r = requests.put('http://localhost:3000/api/demo/weeksum/55ff65f3e58', data)
+
+```
+
+> The above command requires to attach JSON structured in the request body:
+
+```json
+    {
+
+              "_id": "55ff65f3e58",
+              "week_start_date":"2015-11-16:T00:00:00.000Z",
+              "week_end_date":"2015-11-20:T00:00:00.000Z",
+              "week_index":"^DJC",
+              "bcom_indices":["55ff65f3e60","55ff65f3e61","55ff65f3e62","55ff65f3e63","55ff65f3e64"],
+              "bcom_max":81.75,
+              "bcom_min":80.37,
+              "bcom_avg_slope":-0.15,
+              "bcom_week_momentum":0.62,
+              "bcom_rsi":40.8,
+              "articles":["55ff65f3e70","55ff65f3e71","55ff65f3e72","55ff65f3e73","55ff65f3e74"],
+              "avg_article_sentiment":0.25
+
+    }
+```
+
+This endpoint updates a specific week summary record.
+
+### HTTP Request
+
+`PUT http://localhost:3000/api/demo/weeksum/:weeksumId`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+weeksumId | The ID of the week summary to retrieve
+
+### JSON data format
+
+\* - required field
+
+Field | Description
+--------- | -----------
+*week_start_date | The starting date of a week
+*week_end_date | The ending date of a week
+week_index | A market ticker symbol(default is "^DJC")
+bcom_indices | An array of IDs for market quote records
+*bcom_max | The market index's highest value within a week
+*bcom_min | The market index's lowest value within a week
+*bcom_avg_slope | The market index's slope value for the week
+bcom_week_momentum | The market index's momentum indicator value for the week
+bcom_rsi | The market index's Relative Strength Indicator value for the week
+articles | An array of IDs for news article records
+avg_article_sentiment | The average of all the sentiment field values in the array of articles
+
+
+<aside class="warning">This API is a private api, which server will only accept the requests from authenticated sources.</aside>
+
+## Delete a Week Summary
+
+```javascript
+
+$http.delete('http://localhost:3000/api/demo/weeksum/55ff65f3e58').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.delete('http://localhost:3000/api/demo/weeksum/55ff65f3e58')
+
+```
+
+This endpoint deletes a specific week summary record.
+
+### HTTP Request
+
+`DELETE http://localhost:3000/api/demo/weeksum/:weeksumId`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+weeksumId | The ID of the week summary to delete
+
+<aside class="warning">This API is a private api, for which the server will only accept requests from authenticated sources.</aside>
+
+
+# Get News from Alchemy
+
+## Get News from Alchemy
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/get_news_from_alchemy?startdate=2015-11-16&enddate=2015-11-20').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/get_news_from_alchemy?startdate=2015-11-16&enddate=2015-11-20')
+
+```
+
+
+This endpoint runs the ArticleCrawler.py and ArticleDatabaseClean.py Python scripts to access the Alchemy API to obtain news.
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/get_news_from_alchemy?startdate=YYYY-MM-DD&enddate=YYYY-MM-DD`
+
+
+
+
+# Crawl and Generate Week Summary
+
+## Crawl and Generate Week Summary
+
+```javascript
+
+$http.get('http://localhost:3000/api/demo/crawl_and_generate_week_summary?startdate=2015-11-16&enddate=2015-11-20').success(function (response) {
+    console.log(response);
+});
+
+```
+
+```python
+
+import requests
+
+r = requests.get('http://localhost:3000/api/demo/crawl_and_generate_week_summary?startdate=2015-11-16&enddate=2015-11-20')
+
+```
+
+
+This endpoint runs the IndexCrawler.py Python script to obtain market quotes from Yahoo Finance. After the market quotes have been retrieved, a week summary is generated and stored in the database.
+
+### HTTP Request
+
+`GET http://localhost:3000/api/demo/crawl_and_generate_week_summary?startdate=YYYY-MM-DD&enddate=YYYY-MM-DD`
 
